@@ -1,0 +1,35 @@
+plugins {
+    id 'org.springframework.boot' version '2.6.1'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'groovy'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.6.1'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.6.1'
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    runtimeOnly 'com.h2database:h2:1.4.194'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.6.1'
+    testImplementation'org.spockframework:spock-core:2.0-groovy-3.0'
+    testImplementation'org.spockframework:spock-spring:2.0-groovy-3.0'
+}
+
+test {
+    useJUnitPlatform()
+}
