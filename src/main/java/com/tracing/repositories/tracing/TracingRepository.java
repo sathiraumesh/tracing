@@ -37,7 +37,7 @@ public class TracingRepository {
             .findFirst();
     }
 
-    public Optional<TracingEntity> findDuplicateTraces(UUID vehicleId, float longitude, float latitude, Instant createdAt) {
+    public Optional<TracingEntity> findDuplicateTraces(UUID vehicleId, float lon, float lat, Instant createdAt) {
         return em.createQuery(" select t from TracingEntity t " +
                     " inner join t.vehicle v " +
                     " where v.id =:vehicleId " +
@@ -47,8 +47,8 @@ public class TracingRepository {
                     "order by t.createdAt desc ",
                 TracingEntity.class)
             .setParameter("vehicleId", vehicleId)
-            .setParameter("longitude", longitude)
-            .setParameter("latitude", latitude)
+            .setParameter("longitude", lon)
+            .setParameter("latitude", lat)
             .setParameter("createdAt", createdAt)
             .setHint("hibernate.query.passDistinctThrough", false)
             .setMaxResults(1)

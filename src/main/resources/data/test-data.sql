@@ -1,0 +1,1 @@
+insert into vehicle (id, created_at, updated_at) values ('d03436a4-5d16-11ec-bf63-0242ac130002',  current_timestamp,  current_timestamp);

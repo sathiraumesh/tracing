@@ -1,5 +1,6 @@
 package com.tracing.services.tracing;
 
+import com.tracing.config.TracingProperties;
 import com.tracing.entities.VehicleEntity;
 import com.tracing.entities.TracingEntity;
 import com.tracing.exceptions.ValidationException;
@@ -16,20 +17,19 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-public class TracingServiceBean implements VehicleTracingService{
+public class TracingServiceBean implements TracingService {
 
     private final VehicleRepository vehicleRepository;
     private final TracingRepository tracingRepository;
-    private final int TIME_LIMIT_IN_SECONDS = 30;
+    private final TracingProperties tracingProperties;
 
     @Override
     public void traceVehicleLocation(UUID vehicleId, float lon, float lat) {
         Instant currentInstant = Instant.now();
         VehicleEntity vehicle = fetchVehicle(vehicleId);
-        Optional<TracingEntity> latestDuplicateTrace = fetchDuplicateTracesInTimeLimit(lon, lat, vehicleId,
-            currentInstant, TIME_LIMIT_IN_SECONDS);
+        Optional<TracingEntity> latestDuplicateTrace = fetchDuplicateTracesInTimeLimit(lon, lat, vehicleId, currentInstant);
 
-        if(!latestDuplicateTrace.isPresent()){
+        if(latestDuplicateTrace.isEmpty()){
             TracingEntity newTrace = new TracingEntity();
             newTrace.setVehicle(vehicle);
             newTrace.setCreatedAt(Instant.now());
@@ -46,7 +46,8 @@ public class TracingServiceBean implements VehicleTracingService{
             ));
     }
     private Optional<TracingEntity> fetchDuplicateTracesInTimeLimit(float lng, float lat, UUID vehicleId,
-                                                                    Instant currentInstant, int timeLimit){
-        return tracingRepository.findDuplicateTraces(vehicleId, lng, lat, currentInstant.minusSeconds(timeLimit));
+                                                                    Instant currentInstant){
+        return tracingRepository.findDuplicateTraces(vehicleId, lng, lat,
+            currentInstant.minusSeconds(tracingProperties.getTimeInterval()));
     }
 }
