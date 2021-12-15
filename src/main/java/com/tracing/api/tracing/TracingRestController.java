@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
+import javax.validation.Valid;
+
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -23,7 +25,7 @@ private final TracingServiceBean tracingService;
     @PutMapping("/vehicle/{id}/position")
     public void traceVehicleTrace(
         @PathVariable UUID id,
-        @RequestBody TraceLocation location
+        @Valid @RequestBody TraceLocation location
         ){
        tracingService.traceVehicleLocation(id, location.getLon(), location.getLat());
     }

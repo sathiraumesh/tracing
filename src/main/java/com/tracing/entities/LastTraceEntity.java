@@ -14,7 +14,6 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Data
 @Table(name="last_tracing")
 public class LastTraceEntity {
-
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;

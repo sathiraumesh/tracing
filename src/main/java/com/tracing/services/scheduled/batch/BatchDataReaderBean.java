@@ -11,15 +11,12 @@ import java.util.Map;
 import lombok.Data;
 
 @Component
-@JobScope
 @Data
 public class BatchDataReaderBean {
     private String findLastTraceAfterTimeLimitQuery = "select l from LastTraceEntity l " +
         " inner join l.vehicle v " +
         " left join l.trace t    " +
-        " where t.createdAt < :timeLimit ";
+        " where t.createdAt <= :timeLimit ";
 
-    private Map QueryParamValues = Collections.<String, Object>singletonMap(
-        "timeLimit",Instant.now().minus(5, ChronoUnit.MINUTES)
-    );
+    private String queryParamName ="timeLimit";
 }

@@ -13,50 +13,51 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.database.HibernateCursorItemReader;
 import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.Collections;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.sql.DataSource;
 
+import lombok.AllArgsConstructor;
+
 @Configuration
 @EnableBatchProcessing
+@AllArgsConstructor
 public class BatchConfig {
 
-    @Autowired
-    DataSource dataSource;
+    private final DataSource dataSource;
 
-    @Autowired BatchDataReaderBean batchDataReaderBean;
+private final TracingProperties tracingProperties;
 
-    @Autowired
-    EntityManager em;
+    private final BatchDataReaderBean batchDataReaderBean;
 
-    @Autowired
-    public JobBuilderFactory jobBuilderFactory;
+    private final EntityManager em;
 
-    @Autowired
-    public StepBuilderFactory stepBuilderFactory;
+    private final JobBuilderFactory jobBuilderFactory;
+
+    private final StepBuilderFactory stepBuilderFactory;
 
     @Bean
     @JobScope
-    public JpaPagingItemReader<LastTraceEntity> reader() throws Exception{
+    public JpaPagingItemReader<LastTraceEntity> reader() throws Exception {
+         Map QueryParamValues = Collections.<String, Object>singletonMap(
+           batchDataReaderBean.getQueryParamName() , Instant.now().minus(tracingProperties.getTimeInterval(), ChronoUnit.MINUTES)
+        );
         JpaPagingItemReader<LastTraceEntity> reader = new JpaPagingItemReader<LastTraceEntity>();
         reader.setQueryString(batchDataReaderBean.getFindLastTraceAfterTimeLimitQuery());
-        reader.setParameterValues(batchDataReaderBean.getQueryParamValues());
+        reader.setParameterValues(QueryParamValues);
         reader.setEntityManagerFactory(em.getEntityManagerFactory());
         reader.setPageSize(3);
         reader.afterPropertiesSet();

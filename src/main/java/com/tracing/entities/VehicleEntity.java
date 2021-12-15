@@ -18,7 +18,6 @@ import lombok.Data;
 @Entity
 @Table(name = "vehicle")
 public class VehicleEntity {
-
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
