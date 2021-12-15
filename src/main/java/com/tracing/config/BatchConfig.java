@@ -39,7 +39,7 @@ public class BatchConfig {
 
     private final DataSource dataSource;
 
-private final TracingProperties tracingProperties;
+    private final TracingProperties tracingProperties;
 
     private final BatchDataReaderBean batchDataReaderBean;
 
@@ -52,14 +52,15 @@ private final TracingProperties tracingProperties;
     @Bean
     @JobScope
     public JpaPagingItemReader<LastTraceEntity> reader() throws Exception {
-         Map QueryParamValues = Collections.<String, Object>singletonMap(
-           batchDataReaderBean.getQueryParamName() , Instant.now().minus(tracingProperties.getTimeLimit(), ChronoUnit.MINUTES)
+        // scoped bean is created since the time has to change in every job
+        Map QueryParamValues = Collections.<String, Object>singletonMap(
+            batchDataReaderBean.getQueryParamName(), Instant.now().minus(tracingProperties.getTimeLimit(), ChronoUnit.MINUTES)
         );
         JpaPagingItemReader<LastTraceEntity> reader = new JpaPagingItemReader<LastTraceEntity>();
         reader.setQueryString(batchDataReaderBean.getFindLastTraceAfterTimeLimitQuery());
         reader.setParameterValues(QueryParamValues);
         reader.setEntityManagerFactory(em.getEntityManagerFactory());
-        reader.setPageSize(3);
+        reader.setPageSize(100);
         reader.afterPropertiesSet();
         reader.setSaveState(true);
         return reader;

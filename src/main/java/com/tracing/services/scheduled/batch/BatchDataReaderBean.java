@@ -13,6 +13,8 @@ import lombok.Data;
 @Component
 @Data
 public class BatchDataReaderBean {
+
+    // jpql query that needs to be passed to the batch scheduler
     private String findLastTraceAfterTimeLimitQuery = "select l from LastTraceEntity l " +
         " inner join l.vehicle v " +
         " left join l.trace t    " +

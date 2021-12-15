@@ -20,7 +20,8 @@ public class VehicleTraceSyncValidationScheduler {
 
     @Scheduled(fixedRate = 5 * 60000)
     public void syncVehicleTraces() throws Exception {
-        JobParameters jobParameters = new JobParametersBuilder().addLong("uniqueness", System.currentTimeMillis())
+        JobParameters jobParameters = new JobParametersBuilder()
+            .addLong("uniqueness", System.currentTimeMillis())
             .toJobParameters();
         jobLauncher.run(job, jobParameters);
     }
