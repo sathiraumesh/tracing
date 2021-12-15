@@ -10,4 +10,5 @@ import lombok.Data;
 @ConfigurationProperties(prefix = "tracing")
 public class TracingProperties {
     private int timeInterval;
+    private int timeLimit;
 }

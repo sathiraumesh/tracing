@@ -53,7 +53,7 @@ private final TracingProperties tracingProperties;
     @JobScope
     public JpaPagingItemReader<LastTraceEntity> reader() throws Exception {
          Map QueryParamValues = Collections.<String, Object>singletonMap(
-           batchDataReaderBean.getQueryParamName() , Instant.now().minus(tracingProperties.getTimeInterval(), ChronoUnit.MINUTES)
+           batchDataReaderBean.getQueryParamName() , Instant.now().minus(tracingProperties.getTimeLimit(), ChronoUnit.MINUTES)
         );
         JpaPagingItemReader<LastTraceEntity> reader = new JpaPagingItemReader<LastTraceEntity>();
         reader.setQueryString(batchDataReaderBean.getFindLastTraceAfterTimeLimitQuery());
