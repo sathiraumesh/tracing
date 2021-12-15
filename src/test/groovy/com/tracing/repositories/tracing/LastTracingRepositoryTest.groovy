@@ -4,16 +4,19 @@ import com.tracing.entities.LastTraceEntity
 import com.tracing.entities.TracingEntity
 import com.tracing.entities.VehicleEntity
 import com.tracing.repositories.vehicle.VehicleRepository
+import com.tracing.services.scheduled.batch.BatchDataReaderBean
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.context.annotation.Import
 import spock.lang.Specification
 import spock.lang.Subject
 
+import javax.persistence.EntityManager
 import java.time.Instant
+import java.time.temporal.ChronoUnit
 
 @DataJpaTest
-@Import([TracingRepository, VehicleRepository, LastTracingRepository])
+@Import([TracingRepository, VehicleRepository, LastTracingRepository, BatchDataReaderBean])
 class LastTracingRepositoryTest extends Specification {
 
     @Autowired
@@ -25,6 +28,10 @@ class LastTracingRepositoryTest extends Specification {
 
     @Autowired
     private TracingRepository tracingRepository
+
+    @Autowired EntityManager em;
+
+    @Autowired BatchDataReaderBean batchDataReaderBean;
 
     def cleanup() {
         lastTracingRepository.deleteAll()
@@ -106,5 +113,33 @@ class LastTracingRepositoryTest extends Specification {
             result.isPresent()
             result.get().vehicle.id == vehicle.id
             result.get().trace.id == trace.id
+    }
+
+    def 'should fetch last trace before time limit' (){
+        given: 'a  last trace for vehicle'
+            def vehicle = vehicleRepository.save( new VehicleEntity(
+                createdAt: Instant.now(),
+                updatedAt: Instant.now(),
+            ))
+            def trace = tracingRepository.save(new TracingEntity(
+                vehicle:vehicle,
+                latitude: 10.0f,
+                longitude: 11.0f,
+                createdAt:  Instant.parse("2021-12-14T18:36:00.00Z")
+            ))
+         def lastTrace = lastTracingRepository.save(new LastTraceEntity(
+             vehicle: vehicle,
+             trace: trace
+         ))
+        when: 'the traces are searched by before time limit'
+        def timeLimit = Instant.parse("2021-12-14T18:41:00.00Z").minus(5,ChronoUnit.MINUTES)
+        def result = em.createQuery(
+            batchDataReaderBean.getFindLastTraceAfterTimeLimitQuery(),
+            LastTraceEntity.class)
+            .setParameter("timeLimit", timeLimit)
+            .getResultList()
+        then: 'the result should not be empty'
+        !result.isEmpty()
+
     }
 }

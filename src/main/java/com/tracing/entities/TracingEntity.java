@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import io.micrometer.core.lang.Nullable;
 import lombok.Data;
 
 import static javax.persistence.FetchType.LAZY;
@@ -24,8 +25,10 @@ public class TracingEntity {
     @ManyToOne(fetch = LAZY)
     private VehicleEntity vehicle;
 
+    @Nullable
     private Float latitude;
 
+    @Nullable
     private Float longitude;
 
     private Instant createdAt;
