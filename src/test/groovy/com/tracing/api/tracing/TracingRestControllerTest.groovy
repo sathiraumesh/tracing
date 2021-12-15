@@ -17,9 +17,6 @@ class TracingRestControllerTest extends Specification {
     @Autowired
     private MockMvc mvc;
 
-    private TracingServiceBean tracingService = Mock(TracingServiceBean)
-
-
     def 'should hit the endpoint'() {
         given: 'the request '
             def request = MockMvcRequestBuilders.put("/tracing/vehicle/d03436a4-5d16-11ec-bf63-0242ac130002/position")

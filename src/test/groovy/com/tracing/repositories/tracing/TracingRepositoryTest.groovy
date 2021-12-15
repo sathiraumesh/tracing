@@ -33,7 +33,6 @@ class TracingRepositoryTest extends Specification {
         given: 'a vehicle entity and vehicle tracing entity'
             def vehicle = vehicleRepository.save(
                 new VehicleEntity(
-                id: UUID.randomUUID(),
                 createdAt: Instant.now(),
                 updatedAt: Instant.now())
             )
@@ -51,27 +50,23 @@ class TracingRepositoryTest extends Specification {
         given: 'a vehicle and ad a list of tracing records'
             def vehicle = vehicleRepository.save(
                 new VehicleEntity(
-                    id: UUID.randomUUID(),
                     createdAt: Instant.now(),
                     updatedAt: Instant.now())
             )
             def tracingDetails = [
                 new TracingEntity(
-                    id: 1,
                     vehicle: vehicle,
                     latitude: 10.0,
                     longitude: 10.0,
                     createdAt: Instant.parse("2021-12-14T18:35:24.00Z")
                 ),
                 new TracingEntity(
-                    id: 2,
                     latitude: 10.0,
                     longitude: 10.0,
                     vehicle: vehicle,
                     createdAt: Instant.parse("2021-12-14T18:35:36.00Z")
                 ),
                 new TracingEntity(
-                    id: 3,
                     latitude: 10.0,
                     longitude: 10.0,
                     vehicle: vehicle,
@@ -94,41 +89,35 @@ class TracingRepositoryTest extends Specification {
             def timeDifferanceInSeconds = 30;
             def vehicle = vehicleRepository.save(
                 new VehicleEntity(
-                    id: UUID.randomUUID(),
                     createdAt: Instant.now(),
                     updatedAt: Instant.now())
             )
             def tracingDetails = [
                 new TracingEntity(
-                    id: 1,
                     vehicle: vehicle,
                     latitude: 10.0f,
                     longitude: 10.0f,
                     createdAt: Instant.parse("2021-12-14T18:35:24.00Z")
                 ),
                 new TracingEntity(
-                    id: 2,
                     latitude: 10.0f,
                     longitude: 10.0f,
                     vehicle: vehicle,
                     createdAt: Instant.parse("2021-12-14T18:35:36.00Z")
                 ),
                 new TracingEntity(
-                    id: 3,
                     latitude: 10.0f,
                     longitude: 10.0f,
                     vehicle: vehicle,
                     createdAt: Instant.parse("2021-12-14T18:35:35.00Z")
                 ),
                 new TracingEntity(
-                    id: 4,
                     latitude: 10.0f,
                     longitude: 10.0f,
                     vehicle: vehicle,
                     createdAt: Instant.parse("2021-12-14T18:35:41.00Z")
                 ),
                 new TracingEntity(
-                    id: 5,
                     latitude: 20.0f,
                     longitude: 10.0f,
                     vehicle: vehicle,

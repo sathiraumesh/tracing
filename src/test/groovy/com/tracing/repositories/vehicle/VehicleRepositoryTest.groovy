@@ -26,7 +26,6 @@ class VehicleRepositoryTest extends Specification {
     def 'save vehicle entity'() {
         given: 'a new vehicle entity'
             def vehicle = new VehicleEntity(
-                id: UUID.randomUUID(),
                 createdAt: Instant.now(),
                 updatedAt: Instant.now()
             )
@@ -40,7 +39,6 @@ class VehicleRepositoryTest extends Specification {
         given: 'given a vehicle'
             def vehicle = vehicleRepository.save(
                 new VehicleEntity(
-                    id: UUID.randomUUID(),
                     createdAt: Instant.now(),
                     updatedAt: Instant.now())
             );

@@ -1,12 +1,11 @@
 package com.tracing.services.tracing
 
+import com.tracing.configurations.TracingProperties
 import com.tracing.entities.TracingEntity
 import com.tracing.entities.VehicleEntity
 import com.tracing.exceptions.ValidationException
 import com.tracing.repositories.tracing.TracingRepository
 import com.tracing.repositories.vehicle.VehicleRepository
-import com.tracing.services.tracing.TracingServiceBean
-import com.tracing.services.tracing.VehicleTracingService
 import spock.lang.Specification
 import spock.lang.Subject
 
@@ -16,9 +15,10 @@ class TracingServiceBeanTest extends Specification {
 
     private VehicleRepository vehicleRepository = Mock()
     private TracingRepository tracingRepository = Mock()
+    private TracingProperties tracingProperties = new TracingProperties(timeInterval: 30)
 
     @Subject
-    private VehicleTracingService tracingService = new TracingServiceBean(vehicleRepository, tracingRepository)
+    private TracingService tracingService = new TracingServiceBean(vehicleRepository, tracingRepository, tracingProperties)
 
     def 'should trace the location if no previous tracing are found'() {
         given: 'vehicle id and the coordinates of the location'
