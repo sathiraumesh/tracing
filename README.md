@@ -8,6 +8,7 @@ This project privides tracing service for the vehicles. The service will trace t
 - Open the project in IDE like intelliji Idea
 - Build the project
 - Run the project
+- In-memory H2 datbase is used for persistance
 
 ## Api Documentaion
 - Available on ``` http://domain:port/swagger-ui```
