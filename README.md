@@ -1,6 +1,6 @@
 # Tracing
 
-This project privides tracing service for the vehicles. The service will trace the position of the vehicles. The tracing prevents duplicates within an interval. Further a sceduling batch service is implemented for checking wether the vehcile's position tracing are too long and make sure that it keeps tracing data with no data values. 
+This project provides tracing service for the vehicles. The service will trace the position of the vehicles. The tracing prevents duplicates within an interval. Further a sceduling batch service is implemented for checking wether the vehcile's position tracing are too long and make sure that it keeps tracing data with no data values. 
 
 ## Local Environemnt Setup 
 - Download the repo
